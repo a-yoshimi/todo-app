@@ -1,0 +1,24 @@
+.todo li{
+    display:flex;
+}
+
+.todo div{
+    padding:8px;
+    margin:2px
+}
+
+.todo .title{
+    width: 25%;
+}
+
+.todo .status{
+    width: 15%;
+}
+
+.todo .category{
+    width:10%;
+}
+
+.todo .body{
+    width: 50%;
+}

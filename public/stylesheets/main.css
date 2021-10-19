@@ -37,8 +37,6 @@ body {
   margin:      30px 0;
   text-align:  center;
 }
-
-
 /******* フォームのinfoを非表示に *******/
 .info {
   display: none;

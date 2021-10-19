@@ -1,0 +1,8 @@
+.category ul{
+    display:flex;
+}
+.category li{
+    list-style:none;
+    padding:16px;
+    margin:8px
+}

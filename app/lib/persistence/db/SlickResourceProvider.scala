@@ -1,6 +1,6 @@
 /**
   * This is a sample of Todo Application.
-  * 
+  *
   */
 
 package lib.persistence.db
@@ -13,8 +13,10 @@ trait SlickResourceProvider[P <: JdbcProfile] {
 
   implicit val driver: P
   object UserTable extends UserTable
+  object ToDoTable extends ToDoTable
   // --[ テーブル定義 ] --------------------------------------
   lazy val AllTables = Seq(
-    UserTable
+    UserTable,
+    ToDoTable
   )
 }

@@ -1,45 +1,53 @@
 /**
-  * This is a sample of Todo Application.
-  *
-  */
+ * This is a sample of ToDo Application.
+ *
+ */
 
 package lib.persistence
 
 import scala.concurrent.Future
 import ixias.persistence.SlickRepository
-import lib.model.User
+import lib.model.ToDo
 import slick.jdbc.JdbcProfile
 
-// UserRepository: UserTableへのクエリ発行を行うRepository層の定義
+// ToDoRepository: ToDoTableへのクエリ発行を行うRepository層の定義
 //~~~~~~~~~~~~~~~~~~~~~~
-case class UserRepository[P <: JdbcProfile]()(implicit val driver: P)
-  extends SlickRepository[User.Id, User, P]
-  with db.SlickResourceProvider[P] {
+case class ToDoRepository[P <: JdbcProfile]()(implicit val driver: P)
+  extends SlickRepository[ToDo.Id, ToDo, P]
+    with db.SlickResourceProvider[P] {
 
   import api._
 
   /**
-    * Get ToDo Data
-    */
-  def get(id: Id): Future[Option[EntityEmbeddedId]] =
-    RunDBAction(UserTable, "slave") { _
-      .filter(_.id === id)
-      .result.headOption
-  }
+   * Get ToDo Data
+   */
+  def fecheAll(): Future[Seq[EntityEmbeddedId]] =
+    RunDBAction(ToDoTable, "slave") { slick =>
+      slick.result
+    }
 
   /**
-    * Add User Data
+   * Get ToDo Data by Key
+   */
+  def get(id: Id): Future[Option[EntityEmbeddedId]] =
+    RunDBAction(ToDoTable, "slave") { _
+      .filter(_.id === id)
+      .result.headOption
+    }
+
+  /**
+   * Add ToDo Data
    */
   def add(entity: EntityWithNoId): Future[Id] =
-    RunDBAction(UserTable) { slick =>
+    RunDBAction(ToDoTable) { slick =>
       slick returning slick.map(_.id) += entity.v
     }
 
   /**
-   * Update User Data
+   * Update ToDo Data
    */
   def update(entity: EntityEmbeddedId): Future[Option[EntityEmbeddedId]] =
-    RunDBAction(UserTable) { slick =>
+    RunDBAction(ToDoTable) { slick =>
       val row = slick.filter(_.id === entity.id)
       for {
         old <- row.result.headOption
@@ -51,10 +59,10 @@ case class UserRepository[P <: JdbcProfile]()(implicit val driver: P)
     }
 
   /**
-   * Delete User Data
+   * Delete ToDo Data
    */
   def remove(id: Id): Future[Option[EntityEmbeddedId]] =
-    RunDBAction(UserTable) { slick =>
+    RunDBAction(ToDoTable) { slick =>
       val row = slick.filter(_.id === id)
       for {
         old <- row.result.headOption
