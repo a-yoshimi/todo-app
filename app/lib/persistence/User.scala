@@ -19,7 +19,7 @@ case class UserRepository[P <: JdbcProfile]()(implicit val driver: P)
   import api._
 
   /**
-    * Get ToDo Data
+    * Get User Data
     */
   def get(id: Id): Future[Option[EntityEmbeddedId]] =
     RunDBAction(UserTable, "slave") { _
