@@ -12,38 +12,38 @@ import java.time.LocalDateTime
 
 // ユーザーを表すモデル
 //~~~~~~~~~~~~~~~~~~~~
-import ToDo._
-case class ToDo(
+import Todo._
+case class Todo(
                  id:         Option[Id],
-                 categoryId: Int,
+                 categoryId: TodoCategory.Id,
                  title:      String,
                  body:       String,
-                 state:      Status,
+                 state:      TodoStatus,
                  updatedAt:  LocalDateTime = NOW,
                  createdAt:  LocalDateTime = NOW
                ) extends EntityModel[Id]
 
 // コンパニオンオブジェクト
 //~~~~~~~~~~~~~~~~~~~~~~~~
-object ToDo {
+object Todo {
 
   val  Id = the[Identity[Id]]
-  type Id = Long @@ ToDo
-  type WithNoId = Entity.WithNoId [Id, ToDo]
-  type EmbeddedId = Entity.EmbeddedId[Id, ToDo]
+  type Id = Long @@ Todo
+  type WithNoId = Entity.WithNoId [Id, Todo]
+  type EmbeddedId = Entity.EmbeddedId[Id, Todo]
 
   // ステータス定義
   //~~~~~~~~~~~~~~~~~
-  sealed abstract class Status(val code: Short, val name: String) extends EnumStatus
-  object Status extends EnumStatus.Of[Status] {
-    case object IS_TODO     extends Status(code = 0,   name = "TODO(着手前)")
-    case object IS_PROGRESS extends Status(code = 100, name = "進行中")
-    case object IS_COMPLETE extends Status(code = 255,   name = "完了")
+  sealed abstract class TodoStatus(val code: Short, val name: String) extends EnumStatus
+  object TodoStatus extends EnumStatus.Of[TodoStatus] {
+    case object IS_TODO     extends TodoStatus(code = 0,   name = "TODO(着手前)")
+    case object IS_PROGRESS extends TodoStatus(code = 100, name = "進行中")
+    case object IS_COMPLETE extends TodoStatus(code = 255, name = "完了")
   }
 
-  def apply(categoryId: Int, title: String, body: String, state: Status): ToDo#WithNoId = {
+  def apply(categoryId: TodoCategory.Id, title: String, body: String, state: TodoStatus): Todo#WithNoId = {
     new Entity.WithNoId(
-      new ToDo(
+      new Todo(
         id         = None,
         categoryId = categoryId,
         title      = title,

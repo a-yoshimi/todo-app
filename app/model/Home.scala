@@ -8,9 +8,10 @@ package model
 
 // Topページのviewvalue
 case class ViewValueHome(
-                          title:    String,
-                          cssSrc:   Seq[String],
-                          jsSrc:    Seq[String],
-                          todoList: Seq[ToDo]
+                          title:        String,
+                          cssSrc:       Seq[String],
+                          jsSrc:        Seq[String],
+                          categoryList: Seq[TodoCategory],
+                          todoList:     Seq[Todo]
 ) extends ViewValueCommon
 

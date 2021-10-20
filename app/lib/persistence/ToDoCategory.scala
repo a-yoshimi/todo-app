@@ -1,5 +1,5 @@
 /**
- * This is a sample of Todo Application.
+ * This is a sample of TodoCategory Application.
  *
  */
 
@@ -7,47 +7,47 @@ package lib.persistence
 
 import scala.concurrent.Future
 import ixias.persistence.SlickRepository
-import lib.model.Todo
+import lib.model.TodoCategory
 import slick.jdbc.JdbcProfile
 
-// TodoRepository: TodoTableへのクエリ発行を行うRepository層の定義
+// TodoCategoryRepository: TodoCategoryTableへのクエリ発行を行うRepository層の定義
 //~~~~~~~~~~~~~~~~~~~~~~
-case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
-  extends SlickRepository[Todo.Id, Todo, P]
+case class TodoCategoryRepository[P <: JdbcProfile]()(implicit val driver: P)
+  extends SlickRepository[TodoCategory.Id, TodoCategory, P]
     with db.SlickResourceProvider[P] {
 
   import api._
 
   /**
-   * Get Todo Data
+   * Get TodoCategory Data
    */
   def fecheAll(): Future[Seq[EntityEmbeddedId]] =
-    RunDBAction(TodoTable, "slave") { slick =>
+    RunDBAction(TodoCategoryTable, "slave") { slick =>
       slick.result
     }
 
   /**
-   * Get Todo Data by Key
+   * Get TodoCategory Data by Key
    */
   def get(id: Id): Future[Option[EntityEmbeddedId]] =
-    RunDBAction(TodoTable, "slave") { _
+    RunDBAction(TodoCategoryTable, "slave") { _
       .filter(_.id === id)
       .result.headOption
     }
 
   /**
-   * Add Todo Data
+   * Add TodoCategory Data
    */
   def add(entity: EntityWithNoId): Future[Id] =
-    RunDBAction(TodoTable) { slick =>
+    RunDBAction(TodoCategoryTable) { slick =>
       slick returning slick.map(_.id) += entity.v
     }
 
   /**
-   * Update Todo Data
+   * Update TodoCategory Data
    */
   def update(entity: EntityEmbeddedId): Future[Option[EntityEmbeddedId]] =
-    RunDBAction(TodoTable) { slick =>
+    RunDBAction(TodoCategoryTable) { slick =>
       val row = slick.filter(_.id === entity.id)
       for {
         old <- row.result.headOption
@@ -59,10 +59,10 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
     }
 
   /**
-   * Delete Todo Data
+   * Delete TodoCategory Data
    */
   def remove(id: Id): Future[Option[EntityEmbeddedId]] =
-    RunDBAction(TodoTable) { slick =>
+    RunDBAction(TodoCategoryTable) { slick =>
       val row = slick.filter(_.id === id)
       for {
         old <- row.result.headOption

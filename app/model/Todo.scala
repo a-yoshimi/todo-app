@@ -4,12 +4,12 @@
  *
  */
 package model
-import lib.model.ToDo._
+import lib.model.Todo._
 // TODO表示用モデル
-case class ToDo(
-                 id:  Int,
-                 categoryId: Int,
-                 title:  String,
-                 body: String,
-                 state:  Status,
+case class Todo(
+    id:       Id,
+    category: String,
+    title:    String,
+    body:     String,
+    state:    TodoStatus
                )

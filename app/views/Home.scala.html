@@ -10,9 +10,9 @@
     <li><a>カテゴリー 一覧</a></li>
      <div id="category-list" class="category list">
        <ul>
-        <li>categor A</li>
-        <li>categor B</li>
-        <li>categor C</li>
+       @for(category <- vv.categoryList) {
+           <li>@category.name</li>
+       }
        </ul>
      </div>
     <li><a>Todo 一覧</a></li>
@@ -27,8 +27,8 @@
       @for(todo <- vv.todoList) {
            <li>
                <div id="todo-title" class="todo title">@todo.title</div>
-               <div id="todo-status" class="todo status">TODO</div>
-               <div id="todo-category" class="todo category">かてごり</div>
+               <div id="todo-status" class="todo status">@todo.state.name</div>
+               <div id="todo-category" class="todo category">@todo.category</div>
                <div id="todo-body" class="todo body">@todo.body</div>
            </li>
       }
