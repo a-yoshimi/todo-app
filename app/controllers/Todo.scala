@@ -15,21 +15,25 @@ import model._
 import lib.persistence.default.{TodoRepository,TodoCategoryRepository}
 import lib.model.Todo._
 
-@Singleton
-class HomeController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
 
-  def index() = Action.async {
+@Singleton
+class TodoController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
+
+  /*
+   * Todo 一覧表示
+   * */
+  def list() = Action.async {
     for (
       category <- TodoCategoryRepository.fecheAll();
       todo     <- TodoRepository.fecheAll()
     ) yield {
       val categoryList = category.map(category =>
-            TodoCategory(
-              category.id,
-              category.v.name,
-              category.v.color
-            )
-          )
+        TodoCategory(
+          category.id,
+          category.v.name,
+          category.v.color
+        )
+      )
       val todoList = todo.map(todo =>
         Todo(
           todo.id,
@@ -50,5 +54,21 @@ class HomeController @Inject()(val controllerComponents: ControllerComponents) e
       )
       Ok(views.html.Home(vv))
     }
+  }
+
+  /*
+   *  Todo 削除
+   */
+  def delete(id: Long) = Action async {
+      val todoId = lib.model.Todo.Id(id)
+      for {
+        todoDelete <- TodoRepository.remove(todoId)
+      } yield {
+        todoDelete match {
+          case _ =>
+            Redirect(routes.TodoController.list())
+              .flashing("success" -> "Todoを削除しました")
+        }
+      }
   }
 }

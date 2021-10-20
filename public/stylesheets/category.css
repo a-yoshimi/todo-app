@@ -3,6 +3,29 @@
 }
 .category li{
     list-style:none;
-    padding:16px;
-    margin:8px
+    padding:2px;
+}
+
+.category li.catColor1 {
+    background-color: var(--category1-color) ;
+}
+
+.category li.catColor2 {
+    background-color: var(--category2-color) ;
+}
+
+.category li.catColor3 {
+    background-color: var(--category3-color) ;
+}
+
+/** カテゴリカラー定義 **/
+:root {
+    /*color指定 1*/
+    --category1-color: lightblue;
+
+    /*color指定 2*/
+    --category2-color: lightpink;
+
+    /*color指定 3*/
+    --category3-color: lightgreen;
 }
