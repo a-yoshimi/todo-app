@@ -67,7 +67,6 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
         todoDelete match {
           case _ =>
             Redirect(routes.TodoController.list())
-              .flashing("success" -> "Todoを削除しました")
         }
       }
   }
