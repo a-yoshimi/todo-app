@@ -1,5 +1,5 @@
 @import controllers.TodoForm.TodoForm
-@(vvta: model.ViewValueTodoAdd, form: Form[TodoForm], postUrl: Call)(implicit request: MessagesRequestHeader)
+@(vvta: model.ViewValueTodoAdd, form: Form[TodoForm])(implicit request: MessagesRequestHeader)
 
 @common.Default(vvta){
  @helper.form(action = routes.TodoController.add()) {
