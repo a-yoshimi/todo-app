@@ -52,4 +52,13 @@ object Todo {
       )
     )
   }
+
+  def build(categoryId: TodoCategory.Id, title: String, body: String, state: TodoStatus): Todo#WithNoId =
+    new Todo(
+      id         = None,
+      categoryId = categoryId,
+      title      = title,
+      body       = body,
+      state      = state
+    ).toWithNoId
 }

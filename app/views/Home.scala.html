@@ -4,40 +4,10 @@
  *
  *@
 
-@(vv: model.ViewValueHome)
+@(vv: model.ViewValueCommon)
 @common.Default(vv){
    <ul>
-    <li><a>カテゴリー 一覧</a></li>
-     <div id="category-list" class="category list">
-       <ul>
-       @for(category <- vv.categoryList) {
-           <li class="catColor@category.color">@category.name</li>
-       }
-       </ul>
-     </div>
-    <li><a>Todo 一覧</a></li>
-     <div id="todo.css-list" class="todo list">
-      <ul>
-          <li>
-              <div id="todo-info" class="label todo status">進捗/カテゴリ</div>
-              <div id="todo-title" class="label todo title">Todo</div>
-              <div id="todo-body" class="label todo body">詳細</div>
-              <div id="todo-button" class="label todo button"></div>
-          </li>
-      @for(todo <- vv.todoList) {
-           <li class="catColor@todo.category.color">
-               <div id="todo-info-@todo.id" class="todo status">
-                   @todo.state.name  / @todo.category.name
-               </div>
-               <div id="todo-title-@todo.id" class="todo title">@todo.title</div>
-               <div id="todo-body-@todo.id" class="todo body">@todo.body</div>
-               <div id="todo-button-@todo.id" class="todo button">
-                   <label class="todo-edit-@todo.id" onclick="">編集</label>
-                   <label class="todo-delete-@todo.id">削除</label>
-               </div>
-           </li>
-      }
-      </ul>
-     </div>
-   </ul>
+    <li><a>カテゴリー一覧</a></li>
+    <li><a>Todo一覧</a></li>
+ </ul>
 }

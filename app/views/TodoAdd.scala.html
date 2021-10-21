@@ -1,0 +1,18 @@
+@import controllers.TodoForm.TodoForm
+@(vvta: model.ViewValueTodoAdd, form: Form[TodoForm], postUrl: Call)(implicit request: MessagesRequestHeader)
+
+@common.Default(vvta){
+ @helper.form(action = routes.TodoController.add()) {
+  @helper.CSRF.formField
+
+  @helper.inputText(form("categoryId"))
+
+  @helper.inputText(form("title"))
+
+  @helper.inputText(form("body"))
+
+  @helper.inputText(form("state"))
+
+  <button>Create Todo</button>
+ }
+}

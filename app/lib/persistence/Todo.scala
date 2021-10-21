@@ -7,8 +7,9 @@ package lib.persistence
 
 import scala.concurrent.Future
 import ixias.persistence.SlickRepository
-import lib.model.Todo
+import lib.model.{Todo, TodoCategory}
 import slick.jdbc.JdbcProfile
+import lib.model.Todo.TodoStatus
 
 // TodoRepository: TodoTableへのクエリ発行を行うRepository層の定義
 //~~~~~~~~~~~~~~~~~~~~~~
@@ -40,6 +41,7 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
    */
   def add(entity: EntityWithNoId): Future[Id] =
     RunDBAction(TodoTable) { slick =>
+      println(entity)
       slick returning slick.map(_.id) += entity.v
     }
 
