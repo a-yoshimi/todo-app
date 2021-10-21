@@ -23,9 +23,11 @@ class TodoController @Inject()(val controllerComponents: ControllerComponents) e
    * Todo 一覧表示
    * */
   def list() = Action.async {
+    val fCategory = TodoCategoryRepository.fecheAll()
+    val fTodo     = TodoRepository.fecheAll()
     for (
-      category <- TodoCategoryRepository.fecheAll();
-      todo     <- TodoRepository.fecheAll()
+      category <- fCategory;
+      todo     <- fTodo
     ) yield {
       val categoryList = category.map(category =>
         TodoCategory(

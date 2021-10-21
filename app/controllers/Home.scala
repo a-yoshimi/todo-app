@@ -19,9 +19,12 @@ import lib.model.Todo._
 class HomeController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
 
   def index() = Action.async {
+    val fCategory = TodoCategoryRepository.fecheAll()
+    val fTodo     = TodoRepository.fecheAll()
+
     for (
-      category <- TodoCategoryRepository.fecheAll();
-      todo     <- TodoRepository.fecheAll()
+      category <- fCategory;
+      todo     <- fTodo
     ) yield {
       val categoryList = category.map(category =>
             TodoCategory(
