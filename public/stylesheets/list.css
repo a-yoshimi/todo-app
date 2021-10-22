@@ -10,12 +10,11 @@ ul{
     border-color: white;
     border: solid 1px white;
 }
-}
-
-.list.btn{
+.list .btn {
     border: 1px solid whitesmoke;
     border-radius: 3px;
     background-color: whitesmoke;
     padding: 5px;
     text-align: center;
+    cursor: pointer;
 }

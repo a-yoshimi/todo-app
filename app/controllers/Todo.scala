@@ -78,14 +78,12 @@ class TodoController @Inject()(cc: MessagesControllerComponents) extends Message
    */
   def add() = Action async { implicit request: MessagesRequest[AnyContent] =>
     val formValidationResult = form.bindFromRequest()
-    println(form)
-    println(formValidationResult)
     formValidationResult.fold(
       {formWithErrors: Form[TodoForm] =>
         for (
           vvt <- baselist
         )yield {
-          BadRequest(views.html.Todo(vvt, form))
+          BadRequest(views.html.Todo(vvt, formWithErrors))
         }
       },
       { dataForm: TodoForm =>
@@ -95,7 +93,6 @@ class TodoController @Inject()(cc: MessagesControllerComponents) extends Message
           dataForm.body,
           Todo.TodoStatus.IS_TODO
         )
-        println(todoData)
         for (
           todoCreate  <- TodoRepository.add(todoData)
         ) yield {
@@ -127,7 +124,7 @@ class TodoController @Inject()(cc: MessagesControllerComponents) extends Message
           ))))
         }
         case _ => {
-          Redirect(routes.TodoController.list())
+          Ok(views.html.Todo(vvt, form))
         }
       }
     }
@@ -143,11 +140,10 @@ class TodoController @Inject()(cc: MessagesControllerComponents) extends Message
         for (
           vvt <- baselist
         )yield {
-          BadRequest(views.html.Todo(vvt, form))
+          BadRequest(views.html.Todo(vvt, formWithErrors))
         }
       },
       { dataForm: TodoForm =>
-        println(dataForm)
         val taegrtData: Todo#EmbeddedId =
           new Todo(
             id         = Some(Todo.Id(id)),

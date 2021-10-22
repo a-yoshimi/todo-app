@@ -10,7 +10,7 @@
     <li>
        <div id="todo-form" class="todo form">
        @helper.form(action =
-           if (form("categoryId").value.isEmpty)
+           if (form("id").value.isEmpty)
                routes.TodoController.add()
            else
                routes.TodoController.update(form("id").value.get.toLong)){
@@ -18,7 +18,7 @@
            @helper.select(form("categoryId"), vvt.categoryOptionList, 'id -> "todo-state-input", '_label -> "カテゴリ")
            @helper.inputText(form("title"), 'id -> "todo-title-input", '_label -> "タイトル", 'size -> "64", 'placeholder -> "やること")
            @helper.textarea(form("body"), 'id -> "todo-body-input", '_label -> "本分", 'rows -> "2", 'cols -> "100", 'placeholder -> "やってやれないこともない")
-           @if(form("categoryId").value.isEmpty) {
+           @if(form("id").value.isEmpty || form("id").value.get == "0" ) {
                @helper.select( form("state"), ModelTodo.OptionStatus, 'id -> "todo-state-input", '_label -> "ステータス", 'disabled -> "disabled" )
                <input type="hidden" value="@ModelTodo.TodoStatus.IS_TODO.code" name="state">
                <input type="hidden" value="0" name="id">
