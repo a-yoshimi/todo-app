@@ -41,7 +41,7 @@ case class TodoRepository[P <: JdbcProfile]()(implicit val driver: P)
    */
   def add(entity: EntityWithNoId): Future[Id] =
     RunDBAction(TodoTable) { slick =>
-      println(entity)
+      println("登録")
       slick returning slick.map(_.id) += entity.v
     }
 

@@ -1,8 +1,10 @@
+
+.todo.list{
+    font-size: 13px;
+}
 .todo li{
     display:flex;
 }
-
-
 
 .todo div{
     padding:2px;
@@ -10,13 +12,11 @@
     line-height: 40px;
 }
 
-.todo.status.label {
-    font-size: 20px;
+.todo.category {
+    width: 10%;
 }
-
-.todo.status {
-    width: 25%;
-    font-size: 12px;
+.todo.state {
+    width: 10%;
 }
 
 .todo.title{
@@ -29,6 +29,7 @@
 .todo.button{
     width: 10%;
 }
+
 
 /** カラー **/
 .todo li.catColor1 {

@@ -25,17 +25,15 @@ import controllers.TodoForm._
 class TodoController @Inject()(cc: MessagesControllerComponents) extends MessagesAbstractController(cc) {
   import TodoForm._
 
-  val cssSrcSeq = Seq("main", "category", "list", "todo").map(s => s + ".css")
+  val cssSrcSeq = Seq("main", "category", "list", "todo", "input").map(s => s + ".css")
   val jsSrcSeq  = Seq("main.js")
-  /*
-   * Todo 一覧表示
-   * */
-  def list() = Action.async {
+
+  private def baselist( ): Future[ViewValueTodo]  = {
     val fCategory = TodoCategoryRepository.fecheAll()
-    val fTodo     = TodoRepository.fecheAll()
+    val fTodo = TodoRepository.fecheAll()
     for (
       category <- fCategory;
-      todo     <- fTodo
+      todo <- fTodo
     ) yield {
       val categoryList = category.map(category =>
         TodoCategory(
@@ -54,28 +52,25 @@ class TodoController @Inject()(cc: MessagesControllerComponents) extends Message
           todo.v.state
         )
       )
-
-      val vv = ViewValueTodo(
-        title  = "Todo管理",
+      ViewValueTodo(
+        title = "Todo",
         cssSrc = cssSrcSeq,
-        jsSrc  = jsSrcSeq,
-        categoryList = categoryList,
+        jsSrc = jsSrcSeq,
+        categoryOptionList = categoryList.map(category => (category.id.toString, category.name)),
         todoList = todoList
       )
-      Ok(views.html.TodoList(vv))
     }
   }
 
   /*
-   * 登録画面 表示
-   */
-  def addIndex() = Action { implicit request: MessagesRequest[AnyContent] =>
-    val vvta = ViewValueTodoAdd(
-      title        = "Todo追加",
-      cssSrc       = cssSrcSeq,
-      jsSrc        = jsSrcSeq
-    )
-    Ok(views.html.TodoAdd(vvta, form))
+   * Todo 一覧表示
+   * */
+  def list() = Action.async { implicit request: MessagesRequest[AnyContent] =>
+      for (
+        vvt <- baselist
+      )yield {
+        Ok(views.html.Todo(vvt, form))
+      }
   }
 
   /*
@@ -83,26 +78,26 @@ class TodoController @Inject()(cc: MessagesControllerComponents) extends Message
    */
   def add() = Action async { implicit request: MessagesRequest[AnyContent] =>
     val formValidationResult = form.bindFromRequest()
+    println(form)
+    println(formValidationResult)
     formValidationResult.fold(
       {formWithErrors: Form[TodoForm] =>
-        Future(BadRequest(
-          views.html.TodoAdd(
-            ViewValueTodoAdd(
-              title        = "Todo追加: エラー",
-              cssSrc       = cssSrcSeq,
-              jsSrc        = jsSrcSeq),
-            form)
-      ))},
+        for (
+          vvt <- baselist
+        )yield {
+          BadRequest(views.html.Todo(vvt, form))
+        }
+      },
       { dataForm: TodoForm =>
-        val todoData: Todo#WithNoId = Todo.build(
+        val todoData: Todo#WithNoId = Todo(
           lib.model.TodoCategory.Id(dataForm.categoryId),
           dataForm.title,
           dataForm.body,
           Todo.TodoStatus.IS_TODO
         )
-        val addExec = TodoRepository.add(todoData)
+        println(todoData)
         for (
-          todoCreate  <- addExec
+          todoCreate  <- TodoRepository.add(todoData)
         ) yield {
           todoCreate match {
             case _ =>
@@ -117,20 +112,14 @@ class TodoController @Inject()(cc: MessagesControllerComponents) extends Message
    */
   def updateIndex(id: Long) = Action async{ implicit request: MessagesRequest[AnyContent] =>
     val fTodo     = TodoRepository.get(Todo.Id(id))
-
     for (
-      todo     <- fTodo
+      todo <- fTodo;
+      vvt  <- baselist
     ) yield {
-      println(todo)
-      val vvta = ViewValueTodoAdd(
-        title        = "Todo編集",
-        cssSrc       = cssSrcSeq,
-        jsSrc        = jsSrcSeq
-      )
-
       todo match {
         case Some(data) => {
-          Ok(views.html.TodoAdd(vvta, form.fill(TodoForm(
+          Ok(views.html.Todo(vvt, form.fill(TodoForm(
+            id         = id,
             categoryId = data.v.categoryId,
             title      = data.v.title,
             body       = data.v.body,
@@ -151,22 +140,21 @@ class TodoController @Inject()(cc: MessagesControllerComponents) extends Message
     val formValidationResult = form.bindFromRequest()
     formValidationResult.fold(
       {formWithErrors: Form[TodoForm] =>
-        Future(BadRequest(
-          views.html.TodoAdd(
-            ViewValueTodoAdd(
-              title        = "Todo編集: エラー",
-              cssSrc       = cssSrcSeq,
-              jsSrc        = jsSrcSeq),
-            form)
-        ))},
+        for (
+          vvt <- baselist
+        )yield {
+          BadRequest(views.html.Todo(vvt, form))
+        }
+      },
       { dataForm: TodoForm =>
+        println(dataForm)
         val taegrtData: Todo#EmbeddedId =
           new Todo(
             id         = Some(Todo.Id(id)),
             categoryId = lib.model.TodoCategory.Id(dataForm.categoryId),
             title      = dataForm.title,
             body       = dataForm.body,
-            state      = Todo.TodoStatus.IS_TODO
+            state      = Todo.TodoStatus.find(_.code == dataForm.state).getOrElse(Todo.TodoStatus.IS_TODO)
         ).toEmbeddedId
         for (
           todoUpdate  <- TodoRepository.update(taegrtData)

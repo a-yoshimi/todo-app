@@ -1,0 +1,19 @@
+@*
+ *
+ * to do sample project
+ *
+ *@
+
+@(vv: model.ViewValueTodo)
+@common.Default(vv){
+@*   <ul>*@
+@*    <li><a>カテゴリー 一覧</a></li>*@
+@*     <div id="category-list" class="category list">*@
+@*       <ul>*@
+@*       @for(category <- vv.categoryList) {*@
+@*           <li class="catColor@category.color">@category.name</li>*@
+@*       }*@
+@*       </ul>*@
+@*     </div>*@
+@*   </ul>*@
+}

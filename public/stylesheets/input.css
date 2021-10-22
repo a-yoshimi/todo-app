@@ -1,0 +1,43 @@
+dt{
+    float: left;
+    width: 10%;
+}
+
+dd{
+    margin-left: 80px;
+    width: 90%;
+}
+
+select {
+    width: 10em;
+}
+.reset-btn{
+    float: right;
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    border-left: 0;
+    margin-left: 10px;
+    border-radius: 5px;
+    background: navy;
+    color: #fff;
+    padding: 8px 16px;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 70px;
+}
+.submit-btn {
+    display: block;
+    margin: 0 0 0 auto;
+    min-width: 100px;
+    font-family: inherit;
+    appearance: none;
+    border: 0;
+    border-radius: 5px;
+    background: navy;
+    color: #fff;
+    padding: 8px 16px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+

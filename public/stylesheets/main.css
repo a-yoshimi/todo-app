@@ -26,13 +26,12 @@ body {
 }
 
 .main {
-  width:      980px;
-  margin:     100px auto;
-  padding:    100px;
+  width: 1080px;
+  margin: 25px auto;
+  padding: 50px;
   box-shadow: 0 0 4px gray;
   position:   relative;
 }
-
 .success-message {
   margin:      30px 0;
   text-align:  center;

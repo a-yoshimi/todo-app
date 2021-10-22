@@ -7,22 +7,14 @@ package model
 import lib.model.Todo._
 import controllers.TodoForm
 
-// Todo 一覧表示ページのviewvalue
+// Todo ページのviewvalue
 case class ViewValueTodo(
-                          title:        String,
-                          cssSrc:       Seq[String],
-                          jsSrc:        Seq[String],
-                          categoryList: Seq[TodoCategory],
-                          todoList:     Seq[TodoListObj]
+                          title:              String,
+                          cssSrc:             Seq[String],
+                          jsSrc:              Seq[String],
+                          categoryOptionList: Seq[(String, String)],
+                          todoList:           Seq[TodoListObj]
                         ) extends ViewValueCommon
-
-// Todo 新規追加ページのviewvalue
-case class ViewValueTodoAdd(
-                          title:  String,
-                          cssSrc: Seq[String],
-                          jsSrc:  Seq[String]
-                        ) extends ViewValueCommon
-
 
 // TODO表示用モデル
 case class TodoListObj(

@@ -1,9 +1,10 @@
 .category ul{
     display:flex;
+    padding:10px;
 }
 .category li{
-    list-style:none;
-    padding:2px;
+    padding:10px;
+    margin: 5px;
 }
 
 .category li.catColor1 {
