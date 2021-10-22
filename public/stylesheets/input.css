@@ -41,3 +41,7 @@ select {
     cursor: pointer;
 }
 
+input[type="radio"].hide{
+    　　display: none;
+}
+

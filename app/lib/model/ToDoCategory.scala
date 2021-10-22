@@ -16,7 +16,7 @@ case class TodoCategory(
                  id:         Option[Id],
                  name:       String,
                  slug:       String,
-                 color:      Int,
+                 color:      Short,
                  updatedAt:  LocalDateTime = NOW,
                  createdAt:  LocalDateTime = NOW
                ) extends EntityModel[Id]
@@ -30,7 +30,11 @@ object TodoCategory {
   type WithNoId = Entity.WithNoId [Id, TodoCategory]
   type EmbeddedId = Entity.EmbeddedId[Id, TodoCategory]
 
-  def apply(name: String, slug: String, color: Int): TodoCategory#WithNoId = {
+  // 色選択用
+  val Colorlist = Seq(
+    ("1","lightblue"), ("2","lightpink"), ("3","lightgreen"), ("4","lightcoral"), ("5","lightyellow")
+  )
+  def apply(name: String, slug: String, color: Short): TodoCategory#WithNoId = {
     new Entity.WithNoId(
       new TodoCategory(
         id    = None,

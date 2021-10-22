@@ -39,6 +39,7 @@ class TodoController @Inject()(cc: MessagesControllerComponents) extends Message
         TodoCategory(
           category.id,
           category.v.name,
+          category.v.slug,
           category.v.color
         )
       )
@@ -46,7 +47,7 @@ class TodoController @Inject()(cc: MessagesControllerComponents) extends Message
         TodoListObj(
           todo.id,
           categoryList.find(category =>
-            category.id == todo.v.categoryId).getOrElse(TodoCategory(todo.v.categoryId, "カテゴリなし", 0)),
+            category.id == todo.v.categoryId).getOrElse(TodoCategory(todo.v.categoryId, "カテゴリなし", "からっぽ",  0)),
           todo.v.title,
           todo.v.body,
           todo.v.state
