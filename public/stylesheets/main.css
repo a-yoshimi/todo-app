@@ -40,3 +40,7 @@ body {
 .info {
   display: none;
 }
+
+.error {
+  color: red;
+}

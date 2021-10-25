@@ -9,6 +9,7 @@ import ixias.model._
 
 import java.time.LocalDateTime
 
+
 // ユーザーを表すモデル
 //~~~~~~~~~~~~~~~~~~~~
 import TodoCategory._
@@ -32,8 +33,9 @@ object TodoCategory {
 
   // 色選択用
   val Colorlist = Seq(
-    ("1","lightblue"), ("2","lightpink"), ("3","lightgreen"), ("4","lightcoral"), ("5","lightyellow")
+    ("1","1:lightblue"), ("2","2:lightpink"), ("3","3:lightgreen"), ("4","4:lightcoral"), ("5","5:lightyellow")
   )
+
   def apply(name: String, slug: String, color: Short): TodoCategory#WithNoId = {
     new Entity.WithNoId(
       new TodoCategory(

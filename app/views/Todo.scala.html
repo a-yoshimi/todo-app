@@ -8,6 +8,15 @@
 @common.Default(vvt){
    <ul>
     <li>
+    @if(form.hasGlobalErrors) {
+        <ul>
+        @for(error <- form.globalErrors) {
+            <li>@error.message</li>
+        }
+        </ul>
+    }
+    </li>
+    <li>
        <div id="todo-form" class="todo form">
        @helper.form(action =
            if (form("id").value.isEmpty)

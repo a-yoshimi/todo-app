@@ -11,6 +11,7 @@ import scala.concurrent.duration._
 import scala.concurrent.{Future, _}
 import scala.concurrent.ExecutionContext.Implicits.global
 
+import play.api.http.DefaultHttpErrorHandler
 import play.api.data._
 import play.api.i18n._
 import play.api.mvc._
@@ -28,7 +29,7 @@ class TodoCategoryController @Inject()(cc: MessagesControllerComponents) extends
   val cssSrcSeq = Seq("main", "category", "list", "todo", "input").map(s => s + ".css")
   val jsSrcSeq  = Seq("main.js")
 
-  private def baselist( ): Future[ViewValueCategory]  = {
+  private def baselist(): Future[ViewValueCategory]  = {
     for (
       category <-  TodoCategoryRepository.fecheAll()
     ) yield {
@@ -41,9 +42,9 @@ class TodoCategoryController @Inject()(cc: MessagesControllerComponents) extends
         )
       )
       ViewValueCategory(
-        title = "Category",
-        cssSrc = cssSrcSeq,
-        jsSrc = jsSrcSeq,
+        title        = "Category",
+        cssSrc       = cssSrcSeq,
+        jsSrc        = jsSrcSeq,
         categoryList = categoryList
       )
     }
@@ -55,8 +56,8 @@ class TodoCategoryController @Inject()(cc: MessagesControllerComponents) extends
   def list() = Action.async { implicit request: MessagesRequest[AnyContent] =>
       for (
         vvc <- baselist
-      )yield {
-        Ok(views.html.TodoCategory(vvc, form))
+      ) yield {
+        Ok(views.html.TodoCategory(vvc, form, Seq.empty[String]))
       }
   }
 
@@ -64,13 +65,14 @@ class TodoCategoryController @Inject()(cc: MessagesControllerComponents) extends
    * 登録処理
    */
   def add() = Action async { implicit request: MessagesRequest[AnyContent] =>
+
     val formValidationResult = form.bindFromRequest()
     formValidationResult.fold(
       {formWithErrors: Form[TodoCategoryForm] =>
         for (
-          vvt <- baselist
+          vvc <- baselist
         )yield {
-          BadRequest(views.html.TodoCategory(vvt, formWithErrors))
+          BadRequest(views.html.TodoCategory(vvc, formWithErrors, Seq("登録失敗しました")))
         }
       },
       { dataForm: TodoCategoryForm =>
@@ -79,11 +81,12 @@ class TodoCategoryController @Inject()(cc: MessagesControllerComponents) extends
           dataForm.slug,
           dataForm.color
         )
-        for (
-          todoCreate  <- TodoCategoryRepository.add(categoryData)
-        ) yield {
+        for {
+          todoCreate <- TodoCategoryRepository.add(categoryData)
+          vvc <- baselist
+        } yield {
           todoCreate match {
-            case _ =>
+            case _    =>
               Redirect(routes.TodoCategoryController.list())
           }
         }
@@ -94,22 +97,20 @@ class TodoCategoryController @Inject()(cc: MessagesControllerComponents) extends
    * 編集画面 表示
    */
   def updateIndex(id: Long) = Action async{ implicit request: MessagesRequest[AnyContent] =>
-    val fCategory     = TodoCategoryRepository.get(TodoCategory.Id(id))
     for (
-      category <- fCategory;
       vvc  <- baselist
     ) yield {
-      category match {
+      vvc.categoryList.find(data => data.id.toInt == id ) match {
         case Some(data) => {
           Ok(views.html.TodoCategory(vvc, form.fill(TodoCategoryForm(
             id         = id,
-            name       = data.v.name,
-            slug       = data.v.slug,
-            color      = data.v.color
-          ))))
+            name       = data.name,
+            slug       = data.slug,
+            color      = data.color
+          )), Seq.empty[String]))
         }
         case _ => {
-          Ok(views.html.TodoCategory(vvc, form))
+          BadRequest(views.html.TodoCategory(vvc,  form, Seq("対象のカテゴリデータがありません : " + id.toString)))
         }
       }
     }
@@ -125,23 +126,23 @@ class TodoCategoryController @Inject()(cc: MessagesControllerComponents) extends
         for (
           vvc <- baselist
         )yield {
-          BadRequest(views.html.TodoCategory(vvc, formWithErrors))
+          BadRequest(views.html.TodoCategory(vvc, formWithErrors,  Seq("更新失敗しました")))
         }
       },
       { dataForm: TodoCategoryForm =>
-        val taegrtData: TodoCategory#EmbeddedId =
-          new TodoCategory(
+        val taegrtData: TodoCategory#EmbeddedId = TodoCategory(
             id         = Some(TodoCategory.Id(id)),
             name       = dataForm.name,
             slug       = dataForm.slug,
             color      = dataForm.color,
         ).toEmbeddedId
-        for (
+        for {
           todoUpdate  <- TodoCategoryRepository.update(taegrtData)
-        ) yield {
+          vvc <- baselist
+        }yield {
           todoUpdate match {
-            case _ =>
-              Redirect(routes.TodoCategoryController.list())
+            case None => BadRequest(views.html.TodoCategory(vvc, form,  Seq("対象の更新データはありません")))
+            case _ => Redirect(routes.TodoCategoryController.list())
           }
         }
       }
@@ -153,9 +154,10 @@ class TodoCategoryController @Inject()(cc: MessagesControllerComponents) extends
   def delete(id: Long) = Action async {
       val todoCategoryId = lib.model.TodoCategory.Id(id)
       for {
-        todoDelete <- TodoCategoryRepository.remove(todoCategoryId)
+        categoryDelete <- TodoCategoryRepository.remove(todoCategoryId)
+        todoUpdate     <- TodoRepository.updateForDeleteCategory(todoCategoryId)
       } yield {
-        todoDelete match {
+        categoryDelete match {
           case _ =>
             Redirect(routes.TodoCategoryController.list())
         }

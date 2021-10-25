@@ -54,11 +54,11 @@ class TodoController @Inject()(cc: MessagesControllerComponents) extends Message
         )
       )
       ViewValueTodo(
-        title = "Todo",
-        cssSrc = cssSrcSeq,
-        jsSrc = jsSrcSeq,
+        title              = "Todo",
+        cssSrc             = cssSrcSeq,
+        jsSrc              = jsSrcSeq,
         categoryOptionList = categoryList.map(category => (category.id.toString, category.name)),
-        todoList = todoList
+        todoList           = todoList
       )
     }
   }
@@ -145,8 +145,7 @@ class TodoController @Inject()(cc: MessagesControllerComponents) extends Message
         }
       },
       { dataForm: TodoForm =>
-        val taegrtData: Todo#EmbeddedId =
-          new Todo(
+        val taegrtData: Todo#EmbeddedId = Todo(
             id         = Some(Todo.Id(id)),
             categoryId = lib.model.TodoCategory.Id(dataForm.categoryId),
             title      = dataForm.title,

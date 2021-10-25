@@ -43,3 +43,11 @@
 .todo li.catColor3 {
     background-color: var(--category3-color) ;
 }
+
+.todo li.catColor4 {
+    background-color: var(--category4-color) ;
+}
+
+.todo li.catColor5 {
+    background-color: var(--category5-color) ;
+}

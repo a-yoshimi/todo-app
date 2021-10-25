@@ -41,10 +41,8 @@ object Todo {
     case object IS_COMPLETE extends TodoStatus(code = 255, name = "完了")
   }
   // Option用
-  val OptionStatus = Seq(
-    (TodoStatus.IS_TODO.code.toString, TodoStatus.IS_TODO.name),
-    (TodoStatus.IS_PROGRESS.code.toString, TodoStatus.IS_PROGRESS.name),
-    (TodoStatus.IS_COMPLETE.code.toString, TodoStatus.IS_COMPLETE.name)
+  val OptionStatus:Seq[(String, String)] = Todo.TodoStatus.values.map(data =>
+    (data.code.toString , data.name)
   )
 
   def apply(categoryId: TodoCategory.Id, title: String, body: String, state: TodoStatus): Todo#WithNoId = {

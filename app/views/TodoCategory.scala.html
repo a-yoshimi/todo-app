@@ -5,13 +5,24 @@
  *@
 @import controllers.TodoCategoryForm.TodoCategoryForm
 @import lib.model.{TodoCategory =>  ModelTodoCategory}
-@(vvc: model.ViewValueCategory, form: Form[TodoCategoryForm])(implicit request: MessagesRequestHeader)
+@(vvc: model.ViewValueCategory, form: Form[TodoCategoryForm], errors: Seq[String])(implicit request: MessagesRequestHeader)
 @common.Default(vvc){
     <ul>
         <li>
+            <div id="category-error" class="category error">
+            @if(errors.nonEmpty) {
+                <ul>
+                @for(error <- errors) {
+                    <li>@error</li>
+                }
+                </ul>
+            }
+            </div>
+        </li>
+        <li>
             <div id="category-form" class="category form">
             @helper.form(action =
-                if (form("id").value.isEmpty)
+                if(form("id").value.isEmpty || form("id").value.get == "0" )
                     routes.TodoCategoryController.add()
                 else
                     routes.TodoCategoryController.update(form("id").value.get.toLong)){
