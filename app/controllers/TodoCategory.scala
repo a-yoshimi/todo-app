@@ -154,10 +154,9 @@ class TodoCategoryController @Inject()(cc: MessagesControllerComponents) extends
   def delete(id: Long) = Action async {
       val todoCategoryId = lib.model.TodoCategory.Id(id)
       for {
-        categoryDelete <- TodoCategoryRepository.remove(todoCategoryId)
-        todoUpdate     <- TodoRepository.updateForDeleteCategory(todoCategoryId)
+        deleteAndUpdate <- TodoCategoryRepository.removeAndUpdateTodo(todoCategoryId)
       } yield {
-        categoryDelete match {
+        deleteAndUpdate match {
           case _ =>
             Redirect(routes.TodoCategoryController.list())
         }

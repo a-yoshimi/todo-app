@@ -72,4 +72,29 @@ case class TodoCategoryRepository[P <: JdbcProfile]()(implicit val driver: P)
         }
       } yield old
     }
+
+
+  /**
+   * Delete TodoCategory Data and Update Todo Data
+   */
+  def removeAndUpdateTodo(id: Id): Future[Option[EntityEmbeddedId]] =
+    DBAction(TodoCategoryTable) { case (db, slick1) =>
+    DBAction(TodoTable) { case (_, slick2) =>
+        val action = for {
+          old <- slick1.filter(_.id === id).result.headOption
+          _ <- slick1.filter(_.id === id).delete
+          _ <- slick2.filter(_.categoryId === id).result.headOption
+          _ <- slick2.filter(_.categoryId === id).map(_.categoryId).update(TodoCategory.Id(0))
+        } yield old
+        db.run(action.transactionally)
+    }}
+//    RunDBAction(TodoCategoryTable) { slick =>
+//      val row = slick.filter(_.id === id)
+//      for {
+//        old <- row.result.headOption
+//        _   <- old match {
+//          case None    => DBIO.successful(0)
+//          case Some(_) => row.delete
+//        }
+//      } yield old
 }
