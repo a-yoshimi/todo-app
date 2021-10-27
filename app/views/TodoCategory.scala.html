@@ -1,0 +1,73 @@
+@*
+ *
+ * to do sample project
+ *
+ *@
+@import controllers.TodoCategoryForm.TodoCategoryForm
+@import lib.model.{TodoCategory =>  ModelTodoCategory}
+@(vvc: model.ViewValueCategory, form: Form[TodoCategoryForm], errors: Seq[String])(implicit request: MessagesRequestHeader)
+@common.Default(vvc){
+    <ul>
+        <li>
+            <div id="category-error" class="category error">
+            @if(errors.nonEmpty) {
+                <ul>
+                @for(error <- errors) {
+                    <li>@error</li>
+                }
+                </ul>
+            }
+            </div>
+        </li>
+        <li>
+            <div id="category-form" class="category form">
+            @helper.form(action =
+                if(form("id").value.isEmpty || form("id").value.get == "0" )
+                    routes.TodoCategoryController.add()
+                else
+                    routes.TodoCategoryController.update(form("id").value.get.toLong)){
+                @helper.CSRF.formField
+                @helper.inputText(form("name"), 'id -> "category-name-input", '_label -> "カテゴリー", 'size -> "64", 'placeholder -> "かてごり")
+                @helper.inputText(form("slug"), 'id -> "category-slug-input", '_label -> "Slug", 'size -> "64", 'placeholder -> "Slug設定中・・・")
+                @helper.inputRadioGroup(
+                    form("color"),
+                    options = ModelTodoCategory.Colorlist,
+                    'class  -> "category-input-radio",
+                    'id     -> "category-color-input",
+                    '_label -> "カラー")
+                @if(form("id").value.isEmpty || form("id").value.get == "0" ) {
+                    <input type="hidden" value="0" name="id">
+                    <button class="submit-btn">新規追加</button>
+                } else {
+                    <input type="hidden" value="@form("id").value" name="id">
+                    <a class="reset-btn" href="@routes.TodoCategoryController.list()">取り消し</a>
+                    <button class="submit-btn">更新</button>
+                }
+            }
+            </div>
+        </li>
+        <li>
+            <div id="category.css-list" class="category list">
+                <ul>
+                    <li>
+                        <div id="category-info" class="label category name">カテゴリ</div>
+                        <div id="category-info" class="label category color">Color</div>
+                        <div id="category-body" class="label category slug">Slug</div>
+                        <div id="category-button" class="label category button"></div>
+                    </li>
+                    @for(category <- vvc.categoryList) {
+                        <li >
+                            <div id="category-name-@category.id" class="category name">@category.name</div>
+                            <div id="category-color-@category.id" class="category color">@category.color</div>
+                            <div id="category-slug-@category.id" class="category slug">@category.slug</div>
+                            <div id="category-button-@category.id" class="category button">
+                                <label id="category-edit-@category.id" class="btn" onclick="location.href='@routes.TodoCategoryController.update(category.id)'">編集</label>
+                                <label id="category-delete-@category.id" class="btn" onclick="location.href='@routes.TodoCategoryController.delete(category.id)'">削除</label>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </li>
+    </ul>
+}

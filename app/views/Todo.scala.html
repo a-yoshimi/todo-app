@@ -1,0 +1,70 @@
+@*
+ * Todo画面
+ *@
+
+@import controllers.TodoForm.TodoForm
+@import lib.model.{Todo =>  ModelTodo}
+@(vvt: model.ViewValueTodo, form: Form[TodoForm])(implicit request: MessagesRequestHeader)
+@common.Default(vvt){
+   <ul>
+    <li>
+    @if(form.hasGlobalErrors) {
+        <ul>
+        @for(error <- form.globalErrors) {
+            <li>@error.message</li>
+        }
+        </ul>
+    }
+    </li>
+    <li>
+       <div id="todo-form" class="todo form">
+       @helper.form(action =
+           if (form("id").value.isEmpty)
+               routes.TodoController.add()
+           else
+               routes.TodoController.update(form("id").value.get.toLong)){
+           @helper.CSRF.formField
+           @helper.select(form("categoryId"), vvt.categoryOptionList, 'id -> "todo-state-input", '_label -> "カテゴリ")
+           @helper.inputText(form("title"), 'id -> "todo-title-input", '_label -> "タイトル", 'size -> "64", 'placeholder -> "やること")
+           @helper.textarea(form("body"), 'id -> "todo-body-input", '_label -> "本分", 'rows -> "2", 'cols -> "100", 'placeholder -> "やってやれないこともない")
+           @if(form("id").value.isEmpty || form("id").value.get == "0" ) {
+               @helper.select( form("state"), ModelTodo.OptionStatus, 'id -> "todo-state-input", '_label -> "ステータス", 'disabled -> "disabled" )
+               <input type="hidden" value="@ModelTodo.TodoStatus.IS_TODO.code" name="state">
+               <input type="hidden" value="0" name="id">
+               <button class="submit-btn">新規追加</button>
+           } else {
+               @helper.select( form("state"), ModelTodo.OptionStatus, 'id -> "todo-state-input", '_label -> "ステータス" )
+               <input type="hidden" value="@form("id").value" name="id">
+               <a class="reset-btn" href="@routes.TodoController.list()">取り消し</a>
+               <button class="submit-btn">更新</button>
+           }
+       }
+       </div>
+    </li>
+    <li>
+        <div id="todo.css-list" class="todo list">
+            <ul>
+                <li>
+                  <div id="todo-info" class="label todo category">カテゴリ</div>
+                  <div id="todo-info" class="label todo state">進捗</div>
+                  <div id="todo-title" class="label todo title">Todo</div>
+                  <div id="todo-body" class="label todo body">詳細</div>
+                  <div id="todo-button" class="label todo button"></div>
+              </li>
+          @for(todo <- vvt.todoList) {
+               <li class="catColor@todo.category.color">
+                   <div id="todo-info-@todo.id" class="todo category">@todo.category.name</div>
+                   <div id="todo-info-@todo.id" class="todo state">@todo.state.name</div>
+                   <div id="todo-title-@todo.id" class="todo title">@todo.title</div>
+                   <div id="todo-body-@todo.id" class="todo body">@todo.body</div>
+                   <div id="todo-button-@todo.id" class="todo button">
+                       <label id="todo-edit-@todo.id" class="btn" onclick="location.href='@routes.TodoController.update(todo.id)'">編集</label>
+                       <label id="todo-delete-@todo.id" class="btn" onclick="location.href='@routes.TodoController.delete(todo.id)'">削除</label>
+                   </div>
+               </li>
+          }
+          </ul>
+     </div>
+    </li>
+   </ul>
+}
