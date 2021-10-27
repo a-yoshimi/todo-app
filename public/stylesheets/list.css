@@ -1,0 +1,20 @@
+
+ul{
+    padding-inline-start: 5px;
+    list-style:none;
+}
+
+
+.list li{
+    list-style:none;
+    border-color: white;
+    border: solid 1px white;
+}
+.list .btn {
+    border: 1px solid whitesmoke;
+    border-radius: 3px;
+    background-color: whitesmoke;
+    padding: 5px;
+    text-align: center;
+    cursor: pointer;
+}

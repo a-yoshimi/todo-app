@@ -1,0 +1,117 @@
+
+.category.list{
+    font-size: 13px;
+}
+.category li{
+    display:flex;
+}
+
+.category div{
+    padding:2px;
+    height: 36px;
+    line-height: 40px;
+}
+
+
+.category.name {
+    width: 10%;
+}
+
+.category.color{
+    width: 30%;
+}
+.category.slug{
+    width: 50%;
+}
+
+.category.button{
+    width: 10%;
+}
+
+
+.category-input-radio {
+    display: none;
+    padding: 0.5rem 1rem;
+    margin-right: 18px;
+    border-radius: 3px;
+    transition: all .2s;
+}
+
+.category-input-radio + label {
+    display: inline-block;
+    width: 125px;
+    text-shadow: 0 0 1px rgba(0,0,0,.7);
+    text-align: center;
+}
+
+.category-input-radio:checked + label {
+    border:solid;
+    border-color: #B54A4A;
+    text-shadow: 0 0 1px rgba(0,0,0,.7);
+}
+
+.category-input-radio:focus + labell {
+    outline-color: #4D90FE;
+    outline-offset: -2px;
+    outline-style: auto;
+    outline-width: 5px;
+}
+
+/** カラー **/
+.category li.catColor1 {
+    background-color: var(--category1-color) ;
+}
+
+.category li.catColor2 {
+    background-color: var(--category2-color) ;
+}
+
+.category li.catColor3 {
+    background-color: var(--category3-color);
+}
+
+.category li.catColor4 {
+    background-color: var(--category4-color);
+}
+
+.category li.catColor5 {
+    background-color: var(--category5-color);
+}
+
+#category-color-input_1 + label {
+    background-color: var(--category1-color) ;
+}
+
+#category-color-input_2 + label {
+    background-color: var(--category2-color) ;
+}
+
+#category-color-input_3 + label {
+    background-color: var(--category3-color) ;
+}
+
+#category-color-input_4 + label {
+    background-color: var(--category4-color) ;
+}
+
+#category-color-input_5 + label {
+    background-color: var(--category5-color) ;
+}
+
+/** カテゴリカラー定義 **/
+:root {
+    /*color指定 1*/
+    --category1-color: lightblue;
+
+    /*color指定 2*/
+    --category2-color: lightpink;
+
+    /*color指定 3*/
+    --category3-color: lightgreen;
+
+    /*color指定 4*/
+    --category4-color: lightcoral;
+
+    /*color指定 5*/
+    --category5-color: lightyellow;
+}
