@@ -1,0 +1,21 @@
+<div id="todo-list" class="todo list">
+  <ul>
+    <li>
+      <div id="todo-info" class="label todo category">カテゴリ</div>
+      <div id="todo-info" class="label todo state">進捗</div>
+      <div id="todo-title" class="label todo title">Todo</div>
+      <div id="todo-body" class="label todo body">詳細</div>
+      <div id="todo-button" class="label todo button"></div>
+    </li>
+    <li *ngFor="let todo of todoList " class="catColor{{todo.categoryId}}">
+      <div id="todo-category-{{todo.id}}" class="todo category">{{todo.categoryId}}</div>
+      <div id="todo-state-{{todo.id}}" class="todo state">{{todo.state}}</div>
+      <div id="todo-title-{{todo.id}}" class="todo title">{{todo.title}}</div>
+      <div id="todo-body-{{todo.id}}" class="todo body">{{todo.body}}</div>
+      <div id="todo-button-{{todo.id}}" class="todo button">
+        <label id="todo-edit-{{todo.id}}" class="btn" onclick="location.href='@routes.TodoController.update(todo.id)'">編集</label>
+        <label id="todo-delete-{{todo.id}}" class="btn" onclick="location.href='@routes.TodoController.delete(todo.id)'">削除</label>
+      </div>
+    </li>
+  </ul>
+</div>
