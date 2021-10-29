@@ -7,12 +7,8 @@
         <dl class=" " id="todo-category-input_field">
           <dt><label for="todo-category-input">カテゴリ</label></dt>
           <dd>
-            <select id="todo-category-input" formControlName="categoryId" >
-              <option value=1>フロントエンド</option>
-              <option value=2>バックエンド</option>
-              <option value=3>インフラ</option>
-              <option value=11>色確認 赤</option>
-              <option value=16>色確認 黄</option>
+            <select id="todo-category-input" formControlName="categoryId">
+              <option *ngFor="let category  of categoryList " [ngValue]="category.id.toString()">{{category.name}}</option>
             </select>
           </dd>
         </dl>
@@ -31,19 +27,18 @@
         <dl class=" " id="todo-state-input_field">
           <dt><label for="todo-state-input">ステータス</label></dt>
           <dd>
-            <select id="todo-state-input" formControlName="state" type="number" >
-              <option value="0">TODO(着手前)</option>
-              <option value="100">進行中</option>
-              <option value="255">完了</option>
+            <select id="todo-state-input" formControlName="state" >
+              <option *ngFor="let state of stateList" [ngValue]="state.code">{{state.name}}
+              </option>
             </select>
           </dd>
         </dl>
-        <button class="button" type="submit" class="submit-btn">新規追加</button>
+        <button class="button" type="submit" class="submit-btn">追加/更新</button>
+        <input id="todo-reset-form" class="submit-btn" type="button" value="取り消し" (click)="resetTodoForm()"/>
       </form>
     </div>
   </li>
   <li>
-    <button (click)="todolist.refresh()">リフレッシュ</button>
-    <app-todo-list #todolist></app-todo-list>
+    <app-todo-list [categoryList]="categoryList" [stateList]="stateList" (event)="onClickUpdate($event)" (deleteEvent)="onClickDelete($event)"></app-todo-list>
   </li>
 </ul>

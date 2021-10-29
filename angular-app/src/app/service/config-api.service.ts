@@ -1,16 +1,14 @@
 import { Injectable } from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpHeaders} from '@angular/common/http';
-import { Todo } from '../model/Todo';
+import { ConfigListData } from '../model/config';
 
 import {Observable, of, throwError} from 'rxjs';
-import { catchError, map, tap } from 'rxjs/operators';
-
+import { catchError, tap } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
-export class TodoApiService {
-
-  private todoUrl = 'http://localhost:9000/api/todo';
+export class ConfigApiService {
+  private todoUrl = 'http://localhost:9000/api/config';
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   }
@@ -20,24 +18,22 @@ export class TodoApiService {
   ) { }
 
   /**
-   * Todo 一覧取得
+   * Todo サーバ問い合わせ一覧取得
    */
-  getAll(): Observable<Todo[]> {
+  getState(): Observable<ConfigListData[]> {
     // @ts-ignore
-    return this.http.get<Todo[]>(this.todoUrl, this.httpOptions )
+    return this.http.get<ConfigListData[]>(this.todoUrl + "/state" , this.httpOptions )
       .pipe(catchError(this.handleError));
   }
 
-  add(todo: Todo): Observable<Todo> {
-    return this.http.post<Todo>(this.todoUrl + "/add", todo, this.httpOptions);
-  }
 
-  update(todo: Todo) {
-    return this.http.post<Todo>(this.todoUrl + "/edit", todo, this.httpOptions);
-  }
-
-  delete(id: number) {
-    return this.http.post<Todo>(this.todoUrl + "/delete", {id: id}, this.httpOptions);
+  /**
+   * Todo サーバ問い合わせ一覧取得
+   */
+  getColor(): Observable<ConfigListData[]> {
+    // @ts-ignore
+    return this.http.get<ConfigListData[]>(this.todoUrl+ "/color" , this.httpOptions )
+      .pipe(catchError(this.handleError));
   }
 
   private handleError(error: HttpErrorResponse) {

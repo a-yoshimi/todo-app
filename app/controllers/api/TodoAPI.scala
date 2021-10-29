@@ -78,14 +78,16 @@ class TodoAPIController @Inject() (cc: ControllerComponents)
    */
   def update(): Action[AnyContent] = Action.async  {request =>
     request.body.asJson.map { json =>
-      val stateCode = (json \ "state").as[Short]
+      println(json)
+      val stateCode = (json \ "state").as[String]
       val taegrtData: Todo#EmbeddedId = Todo(
         id         = Some(lib.model.Todo.Id((json \ "id").as[Long])),
         categoryId = lib.model.TodoCategory.Id((json \ "categoryId").as[Long]),
         title      =  (json \ "title").as[String],
         body       = (json \ "body").as[String],
-        state      = Todo.TodoStatus.find(_.code == stateCode).getOrElse(Todo.TodoStatus.IS_TODO)
+        state      = Todo.TodoStatus.find(_.code.toString() == stateCode).getOrElse(Todo.TodoStatus.IS_TODO)
       ).toEmbeddedId
+      println(taegrtData)
       for (
         todoUpdate  <- TodoRepository.update(taegrtData)
       ) yield {

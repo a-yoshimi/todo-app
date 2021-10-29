@@ -4,12 +4,13 @@ import { Todo } from '../model/Todo';
 
 import {Observable, of, throwError} from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
+import {Category} from "../model/category";
 @Injectable({
   providedIn: 'root'
 })
 export class CategoryApiService {
 
-  private todoUrl = 'http://localhost:9000/api/cate';
+  private todoUrl = 'http://localhost:9000/api/category';
   httpOptions = {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
   }
@@ -21,28 +22,23 @@ export class CategoryApiService {
   /**
    * Todo 一覧取得
    */
-  getAll(): Observable<Todo[]> {
+  getAll(): Observable<Category[]> {
     // @ts-ignore
-    return this.http.get<Todo[]>(this.todoUrl, this.httpOptions )
-      .pipe(tap(todos => console.log('load all todo', todos)))
+    return this.http.get<Category[]>(this.todoUrl, this.httpOptions )
       .pipe(catchError(this.handleError));
   }
 
-  add(todo: Todo): Observable<Todo> {
-    return this.http.post<Todo>(this.todoUrl + "/add", todo, this.httpOptions);
+  add(category: Category): Observable<Category> {
+    return this.http.post<Category>(this.todoUrl + "/add", category, this.httpOptions);
   }
 
   private handleError(error: HttpErrorResponse) {
     if (error.status === 0) {
-      // A client-side or network error occurred. Handle it accordingly.
       console.error('An error occurred:', error.error);
     } else {
-      // The backend returned an unsuccessful response code.
-      // The response body may contain clues as to what went wrong.
       console.error(
         `Backend returned code ${error.status}, body was: `, error.error);
     }
-    // Return an observable with a user-facing error message.
     return throwError(
       'Something bad happened; please try again later.');
   }
