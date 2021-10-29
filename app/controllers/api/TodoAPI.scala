@@ -48,12 +48,69 @@ class TodoAPIController @Inject() (cc: ControllerComponents)
       Ok( Json.toJson(result))
     }
   }
+
   /**
    * Todo 登録
    * @return
    */
-  def add(): Action[AnyContent] = Action {request =>
-    println( request.body)
-    Ok(Json.obj("test" -> "wakanna"))
+  def add(): Action[AnyContent] = Action.async  {request =>
+   request.body.asJson.map { json =>
+
+      val todoData: Todo#WithNoId = Todo(
+        lib.model.TodoCategory.Id((json \ "categoryId").as[Long]),
+        (json \ "title").as[String],
+        (json \ "body").as[String],
+        Todo.TodoStatus.IS_TODO
+      )
+      for (
+        todoCreate  <- TodoRepository.add(todoData)
+      ) yield {
+        Ok(Json.obj("result" -> todoCreate.toString))
+      }
+    }.getOrElse {
+     Future.successful( BadRequest(Json.obj("message" -> "登録に失敗しました")))
+    }
   }
+
+  /**
+   * Todo 更新
+   * @return
+   */
+  def update(): Action[AnyContent] = Action.async  {request =>
+    request.body.asJson.map { json =>
+      val stateCode = (json \ "state").as[Short]
+      val taegrtData: Todo#EmbeddedId = Todo(
+        id         = Some(lib.model.Todo.Id((json \ "id").as[Long])),
+        categoryId = lib.model.TodoCategory.Id((json \ "categoryId").as[Long]),
+        title      =  (json \ "title").as[String],
+        body       = (json \ "body").as[String],
+        state      = Todo.TodoStatus.find(_.code == stateCode).getOrElse(Todo.TodoStatus.IS_TODO)
+      ).toEmbeddedId
+      for (
+        todoUpdate  <- TodoRepository.update(taegrtData)
+      ) yield {
+        Ok(Json.obj("result" -> todoUpdate.toString))
+      }
+    }.getOrElse {
+      Future.successful( BadRequest(Json.obj("message" -> "更新に失敗しました")))
+    }
+  }
+
+  /**
+   * Todo  削除
+   * @return
+   */
+  def delete(): Action[AnyContent] = Action.async  {request =>
+    request.body.asJson.map { json =>
+      val targetId = lib.model.Todo.Id((json \ "id").as[Long])
+      for (
+        todoDelete <- TodoRepository.remove(targetId)
+      ) yield {
+        Ok(Json.obj("result" -> todoDelete.toString))
+      }
+    }.getOrElse {
+      Future.successful( BadRequest(Json.obj("message" -> "削除に失敗しました")))
+    }
+  }
+
 }

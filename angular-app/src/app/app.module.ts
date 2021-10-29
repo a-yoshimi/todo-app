@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { TodoComponent } from './todo/todo.component';
 import { TodoListComponent } from './todo/todo-list/todo-list.component';
 import { HttpClientModule } from '@angular/common/http';
-import { MessagesComponent } from './messages/messages.component';
+import { ReactiveFormsModule } from "@angular/forms";
 
 
 @NgModule({
@@ -14,12 +14,12 @@ import { MessagesComponent } from './messages/messages.component';
     AppComponent,
     TodoComponent,
     TodoListComponent,
-    MessagesComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

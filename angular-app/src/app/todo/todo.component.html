@@ -2,30 +2,48 @@
   <li>
 <!--    <app-todo-form></app-todo-form>-->
     <div id="todo-form" class="todo form">
-<!--      @helper.form(action =-->
-<!--      if (form("id").value.isEmpty)-->
-<!--      routes.TodoController.add()-->
-<!--      else-->
-<!--      routes.TodoController.update(form("id").value.get.toLong)){-->
-<!--      @helper.CSRF.formField-->
-<!--      @helper.select(form("categoryId"), vvt.categoryOptionList, 'id -> "todo-state-input", '_label -> "カテゴリ")-->
-<!--      @helper.inputText(form("title"), 'id -> "todo-title-input", '_label -> "タイトル", 'size -> "64", 'placeholder -> "やること")-->
-<!--      @helper.textarea(form("body"), 'id -> "todo-body-input", '_label -> "本分", 'rows -> "2", 'cols -> "100", 'placeholder -> "やってやれないこともない")-->
-<!--      @if(form("id").value.isEmpty || form("id").value.get == "0" ) {-->
-<!--      @helper.select( form("state"), ModelTodo.OptionStatus, 'id -> "todo-state-input", '_label -> "ステータス", 'disabled -> "disabled" )-->
-<!--      <input type="hidden" value="@ModelTodo.TodoStatus.IS_TODO.code" name="state">-->
-<!--      <input type="hidden" value="0" name="id">-->
-<!--      <button class="submit-btn">新規追加</button>-->
-<!--      } else {-->
-<!--      @helper.select( form("state"), ModelTodo.OptionStatus, 'id -> "todo-state-input", '_label -> "ステータス" )-->
-<!--      <input type="hidden" value="@form("id").value" name="id">-->
-<!--      <a class="reset-btn" href="@routes.TodoController.list()">取り消し</a>-->
-<!--      <button class="submit-btn">更新</button>-->
-<!--      }-->
-<!--      }-->
+      <form [formGroup]="todoForm" (ngSubmit)="onSubmit()">
+        <input type="hidden" value="0" formControlName="id">
+        <dl class=" " id="todo-category-input_field">
+          <dt><label for="todo-category-input">カテゴリ</label></dt>
+          <dd>
+            <select id="todo-category-input" formControlName="categoryId" >
+              <option value=1>フロントエンド</option>
+              <option value=2>バックエンド</option>
+              <option value=3>インフラ</option>
+              <option value=11>色確認 赤</option>
+              <option value=16>色確認 黄</option>
+            </select>
+          </dd>
+        </dl>
+        <dl class=" " id="todo-title-input_field">
+          <dt><label for="todo-title-input">タイトル</label></dt>
+          <dd>
+            <input type="text" id="todo-title-input" formControlName="title" size="64" placeholder="やること">
+          </dd>
+        </dl>
+        <dl class=" " id="todo-body-input_field">
+          <dt><label for="todo-body-input">本分</label></dt>
+          <dd>
+            <textarea id="todo-body-input" formControlName="body" rows="2" cols="100" placeholder="やってやれないこともない"></textarea>
+          </dd>
+        </dl>
+        <dl class=" " id="todo-state-input_field">
+          <dt><label for="todo-state-input">ステータス</label></dt>
+          <dd>
+            <select id="todo-state-input" formControlName="state" type="number" >
+              <option value="0">TODO(着手前)</option>
+              <option value="100">進行中</option>
+              <option value="255">完了</option>
+            </select>
+          </dd>
+        </dl>
+        <button class="button" type="submit" class="submit-btn">新規追加</button>
+      </form>
     </div>
   </li>
   <li>
-    <app-todo-list></app-todo-list>
+    <button (click)="todolist.refresh()">リフレッシュ</button>
+    <app-todo-list #todolist></app-todo-list>
   </li>
 </ul>

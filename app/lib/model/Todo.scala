@@ -23,6 +23,8 @@ case class Todo(
                  createdAt:  LocalDateTime = NOW
                ) extends EntityModel[Id]
 
+
+
 // コンパニオンオブジェクト
 //~~~~~~~~~~~~~~~~~~~~~~~~
 object Todo {

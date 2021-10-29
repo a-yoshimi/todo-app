@@ -24,7 +24,13 @@ GET     /cate/delete/:id            controllers.TodoCategoryController.delete(id
 # RESTful API for Angular APP
 GET     /api/todo                   controllers.api.TodoAPIController.list
 POST    /api/todo/add               controllers.api.TodoAPIController.add
+POST    /api/todo/edit              controllers.api.TodoAPIController.add
+POST    /api/todo/delete            controllers.api.TodoAPIController.delete
 
+GET     /api/category               controllers.api.TodoAPIController.list
+POST    /api/category/add           controllers.api.TodoAPIController.add
+POST    /api/category/edit          controllers.api.TodoAPIController.add
+POST    /api/category/delete        controllers.api.TodoAPIController.delete
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
